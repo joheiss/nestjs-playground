@@ -3,5 +3,6 @@ export interface UserDTO {
     readonly objectType?: string;
     readonly orgId?: string;
     readonly roles?: string[];
+    readonly locked?: boolean;
     readonly token?: string;
 }

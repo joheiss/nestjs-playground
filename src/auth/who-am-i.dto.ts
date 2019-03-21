@@ -1,6 +1,3 @@
-import { UserSettingDTO } from '../user/user-setting/user-setting.dto';
-import { UserBookmarkDTO } from '../user/user-bookmark/user-bookmark.dto';
-
 export interface WhoAmIDTO {
     readonly id: string;
     readonly orgId: string;

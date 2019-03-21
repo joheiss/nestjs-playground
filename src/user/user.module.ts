@@ -21,6 +21,10 @@ import { UserSettingDataService } from './user-setting/user-setting.data.service
 import { UserProfileDataService } from './user-profile/user-profile.data.service';
 import { UserDataService } from './user.data.service';
 import { OrganizationDataService } from '../organization/organization.data.service';
+import { UserResolver } from './user.resolver';
+import { UserProfileResolver } from './user-profile/user-profile.resolver';
+import { UserSettingResolver } from './user-setting/user-setting.resolver';
+import { UserBookmarkResolver } from './user-bookmark/user-bookmark.resolver';
 
 @Module({
     imports: [
@@ -41,12 +45,16 @@ import { OrganizationDataService } from '../organization/organization.data.servi
     providers: [
         UserService,
         UserDataService,
+        UserResolver,
         UserProfileService,
         UserProfileDataService,
+        UserProfileResolver,
         UserSettingService,
         UserSettingDataService,
+        UserSettingResolver,
         UserBookmarkService,
         UserBookmarkDataService,
+        UserBookmarkResolver,
         OrganizationService,
         OrganizationDataService,
         PaginationService,

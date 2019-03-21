@@ -1,0 +1,34 @@
+type Auth {
+    id: String!
+    orgId: String!
+    roles: [String!]
+    token: String!
+}
+
+type Setting {
+    type: String!
+    listLimit: Int!
+    bookmarkExpiration: Int!
+}
+type Bookmark {
+    type: String!
+    objectId: String!
+}
+type WhoAmI {
+    id: String!
+    orgId: String!
+    roles: [String!]
+    locked: Boolean
+    displayName: String
+    email: String
+    phone: String
+    settings: [Setting]
+    bookmarks: [Bookmark]
+}
+type Query {
+    whoAmI: WhoAmI,
+}
+
+type Mutation {
+    login(id: String!, password: String!): Auth
+}

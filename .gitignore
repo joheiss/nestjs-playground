@@ -74,6 +74,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
+.env
 *.env
 *.env.test
 
@@ -115,3 +116,4 @@ typings/
 .idea 
 
 ormconfig.json
+graphql-queries.txt

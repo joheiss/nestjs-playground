@@ -1,0 +1,35 @@
+type Organization {
+    id: String
+    objectType: String
+    status: String
+    isDeletable: Boolean
+    name: String
+    timezone: String
+    currency: String
+    locale: String
+    parentId: String
+    children: [Organization]
+}
+
+input OrganizationInput {
+    id: String
+    status: String
+    name: String
+    timezone: String
+    currency: String
+    locale: String
+    parentId: String
+}
+
+type Query {
+    organizations: [Organization],
+    organization(id: String!): Organization
+    organizationTree(id: String!): Organization
+    organizationTreeIds(id: String!): [String!]
+}
+
+type Mutation {
+    createOrganization(input: OrganizationInput!): Organization
+    updateOrganization(id: String!, input: OrganizationInput!): Organization
+    deleteOrganization(id: String!): Organization
+}

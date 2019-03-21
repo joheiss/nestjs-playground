@@ -1,0 +1,26 @@
+scalar GraphQLDateTime
+
+type UserBookmark {
+    id: String
+    type: String
+    objectId: String
+    objectType: String
+    createdAt: GraphQLDateTime
+}
+
+input UserBookmarkInput {
+    id: String
+    type: String
+    objectId: String
+}
+
+type Query {
+    userBookmarks(userId: String!, type: String): [UserBookmark]
+    userBookmark(userId: String!, type: String!, objectId: String!): UserBookmark
+}
+
+type Mutation {
+    createUserBookmark(input: UserBookmarkInput): UserBookmark
+    deleteUserBookmark(userId: String!, type: String!, objectId: String!): UserBookmark
+    deleteUserBookmarks(userId: String!, type: String): [UserBookmark]
+}

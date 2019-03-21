@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserEntity } from '../user/user.entity';
 import { AuthDataService } from './auth.data.service';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { AuthDataService } from './auth.data.service';
     providers: [
         AuthService,
         AuthDataService,
+        AuthResolver,
     ],
     exports: [
         AuthService,

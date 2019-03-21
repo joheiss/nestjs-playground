@@ -1,0 +1,26 @@
+type UserSetting {
+    id: String
+    type: String
+    objectType: String
+    listLimit: Int
+    bookmarkExpiration: Int
+}
+
+input UserSettingInput {
+    id: String
+    type: String
+    listLimit: Int
+    bookmarkExpiration: Int
+}
+
+type Query {
+    userSettings(userId: String!): [UserSetting]
+    userSetting(userId: String!, , type: String!): UserSetting
+}
+
+type Mutation {
+    createUserSetting(input: UserSettingInput): UserSetting
+    updateUserSetting(userId: String!, type: String!, input: UserSettingInput): UserSetting
+    deleteUserSettings(userId: String!): [UserSetting]
+    deleteUserSetting(userId: String!, type: String!): UserSetting
+}

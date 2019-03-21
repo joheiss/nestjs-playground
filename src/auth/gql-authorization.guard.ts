@@ -1,15 +1,23 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as jwt from 'jsonwebtoken';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
-export class AuthorizationGuard implements CanActivate {
+export class GqlAuthorizationGuard implements CanActivate {
+    constructor(private readonly reflector: Reflector) { }
 
-    constructor(protected readonly reflector: Reflector) {}
+    getRequest(context: ExecutionContext): any {
+        const ctx = GqlExecutionContext.create(context);
+        return ctx.getContext().req;
+    }
 
     async canActivate(context: ExecutionContext): Promise<boolean>  {
 
-        const request = context.switchToHttp().getRequest();
+        let request = context.switchToHttp().getRequest();
+        if (!request) {
+            request = this.getRequest(context);
+        }
         request.user = await this.getAuthentication(context);
         if (!request.user) {
             throw new UnauthorizedException('not_authorized');
@@ -22,13 +30,16 @@ export class AuthorizationGuard implements CanActivate {
         // Logger.log(`roles: ${roles}`, 'AuthorizationGuard');
 
         const auth = request.user;
-        // Logger.log(`Auth: ${JSON.stringify(auth)}`, 'AuthorizationGuard');
+        Logger.log(`Auth: ${JSON.stringify(auth)}`, 'GQLAuthorizationGuard');
         const hasRole = () => auth.roles.some((role: string) => roles.includes(role));
         return auth && auth.roles && hasRole();
     }
 
     private async getAuthentication(context: ExecutionContext): Promise<any> {
-        const request = context.switchToHttp().getRequest();
+        let request = context.switchToHttp().getRequest();
+        if (!request) {
+            request = this.getRequest(context);
+        }
         if (!request.headers.authorization) {
             return false;
         }

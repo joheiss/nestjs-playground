@@ -23,10 +23,10 @@ export class UserProfileEntity {
     @UpdateDateColumn()
     changedAt: Date;
 
-    @OneToMany(() => UserSettingEntity, setting => setting.profile, { cascade: true })
+    @OneToMany(() => UserSettingEntity, setting => setting.profile)
     settings: UserSettingEntity[];
 
-    @OneToMany(() => UserBookmarkEntity, bookmark => bookmark.profile, { cascade: true })
+    @OneToMany(() => UserBookmarkEntity, bookmark => bookmark.profile)
     bookmarks: UserBookmarkEntity[];
 
     toDTO(): UserProfileDTO  {

@@ -20,7 +20,7 @@ export class UserSettingEntity {
   @UpdateDateColumn()
   changedAt: Date;
 
-  @ManyToOne(() => UserProfileEntity, profile => profile.settings)
+  @ManyToOne(() => UserProfileEntity, profile => profile.settings, { cascade: true, onDelete: 'CASCADE' })
   profile: UserProfileEntity;
 
   toDTO(): UserSettingDTO {

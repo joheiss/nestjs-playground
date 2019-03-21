@@ -23,7 +23,7 @@ export class UserEntity {
   @UpdateDateColumn()
   changedAt: Date;
 
-  @OneToOne(() => UserProfileEntity, { cascade: true, nullable: true })
+  @OneToOne(() => UserProfileEntity, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   profile: UserProfileEntity;
 

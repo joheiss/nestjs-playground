@@ -77,8 +77,8 @@ export class UserDataService {
         if (await this.exists(input.id)) {
             throw new BadRequestException('user_already_exists');
         }
-        const settings = this.initializeSettings(input);
-        const entity = await this.buildUserEntity(input, settings);
+        const setting = await this.buildUserSettingEntity(input);
+        const entity = await this.buildUserEntity(input, [setting]);
         const result = await this.userRepo.save(entity);
         if (!result) {
             throw new InternalServerErrorException('user_not_created');
@@ -111,16 +111,16 @@ export class UserDataService {
 
     async delete(id: string): Promise<any> {
         const found = await this.findById(id);
-        try {
-            await this.profileRepo.delete(id);
-        } catch (ex) {
+        await this.userRepo.remove(found);
+        if (found.profile) {
+            await this.profileRepo.remove(found.profile);
         }
-        return this.userRepo.remove(found);
+        return found;
     }
 
     private async buildUserEntity(input: Partial<UserInputDTO>, settings?: UserSettingEntity[]): Promise<UserEntity> {
         const roles = input.roles ? input.roles.join(', ') : undefined;
-        const profile = this.buildUserProfileEntity(input, settings);
+        const profile = await this.buildUserProfileEntity(input, settings);
         const { id, password, orgId, locked } = input;
         let organization;
         if (orgId) {
@@ -130,16 +130,18 @@ export class UserDataService {
         return this.userRepo.create(merged);
     }
 
-    private buildUserProfileEntity(input: Partial<UserInputDTO>, settings?: UserSettingEntity[]): UserProfileEntity {
+    private async buildUserProfileEntity(input: Partial<UserInputDTO>, settings?: UserSettingEntity[]): Promise<UserProfileEntity> {
         const { displayName, email, phone, imageUrl } = input;
         const profile = { id: input.id, displayName, email, phone, imageUrl } as UserProfileEntity;
         if (settings) {
             profile.settings = settings;
         }
-        return this.profileRepo.create(profile);
+        const entity = this.profileRepo.create(profile);
+        return await this.profileRepo.save(entity);
     }
 
-    private initializeSettings(input: Partial<UserInputDTO>): UserSettingEntity[] {
-        return [this.settingRepo.create({ id: input.id, type: 'default' })];
+    private async buildUserSettingEntity(input: Partial<UserInputDTO>): Promise<UserSettingEntity> {
+        const entity = this.settingRepo.create({ id: input.id, type: 'default' });
+        return await this.settingRepo.save(entity);
     }
 }

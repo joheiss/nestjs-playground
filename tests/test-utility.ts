@@ -6,6 +6,7 @@ import { OrganizationInputDTO } from '../src/organization/organization-input.dto
 import { ReceiverInputDTO } from '../src/receiver/receiver-input.dto';
 import { UserBookmarkInputDTO } from '../src/user/user-bookmark/user-bookmark-input.dto';
 import { BOType } from '../src/shared/bo-type';
+import { UserInputDTO } from '../src/user/user-input.dto';
 
 export class TestUtility {
 
@@ -13,7 +14,7 @@ export class TestUtility {
     private receiverId: string;
 
     constructor(private server: any) {
-        dotenv.config();
+        dotenv.config({ path: `${process.env.NODE_ENV}.env` });
         this.credentials = {
             id: process.env.TEST_USER,
             password: process.env.TEST_PASSWORD,
@@ -64,11 +65,56 @@ export class TestUtility {
             .set('Authorization', `Bearer ${token}`);
     }
 
+    gqlLogin(credentials: AuthInputDTO): Promise<any> {
+        const gql = { query: `mutation { login(id: "${credentials.id}", password: "${credentials.password}") { id orgId roles token } }` };
+        return this.server
+            .post('/graphql')
+            .send(gql);
+    }
+
+    async gqlCreateUser(input: UserInputDTO, token: string): Promise<any> {
+        return await this.runGql({
+            query:
+                `mutation {
+                            createUser(input: {
+                                id: "${input.id}" password: "${input.password}", orgId: "${input.orgId}" roles: "${input.roles}",
+                                displayName: "${input.displayName}", email: "${input.email}"
+                            })
+                            { id orgId roles locked }
+                        }`,
+        }, token);
+    }
+
+    gqlIsNotAllowed(response: any): boolean {
+        const { errors } = response.body;
+        expect(errors).toBeTruthy();
+        const statusCode = errors[0].message.statusCode;
+        return statusCode === HttpStatus.UNAUTHORIZED || statusCode === HttpStatus.FORBIDDEN;
+    }
+
+    gqlIsOK(response: any): boolean {
+        const { errors, data } = response.body;
+        return !!errors === false && !!data === true;
+    }
+
+    parseGqlErrors(response: any): any {
+        const errors = response.body.errors;
+        return errors ? errors[0].message : undefined;
+    }
+
+    runGql(gql: any, token: string): Promise<any> {
+        return this.server
+            .post('/graphql')
+            .send(gql)
+            .set('Authorization', `Bearer ${token}`);
+    }
+
     async createTestUsers(): Promise<void> {
         console.log('credentials: ', this.credentials);
         const response = await this.login(this.credentials);
         const token = response.body.token;
         for (const u of TestUsers) {
+            console.log('test user creds: ', u.id, u.password);
             const res = await this.post('/api/users', u, token);
         }
     }

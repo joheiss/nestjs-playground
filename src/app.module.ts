@@ -1,4 +1,5 @@
 import { Logger, Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrganizationModule } from './organization/organization.module';
 import { ReceiverModule } from './receiver/receiver.module';
@@ -10,10 +11,18 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 import * as path from 'path';
+import { GraphQLDateTime } from 'graphql-iso-date';
 
 @Module({
     imports: [
         ConfigModule.load(path.resolve(__dirname, 'config', '**', '!(*.d).{ts,js}')),
+        GraphQLModule.forRootAsync({
+            useFactory: () => ({
+                typePaths: ['./**/*.graphql'],
+                resolvers: { GraphQLDateTime },
+                context: ({ req }) => ({ req }),
+            }),
+        }),
         TypeOrmModule.forRootAsync({
             useFactory: (config: ConfigService) => config.get('database'),
             inject: [ConfigService],

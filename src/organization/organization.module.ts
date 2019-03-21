@@ -15,6 +15,7 @@ import { OrganizationDataService } from './organization.data.service';
 import { UserBookmarkDataService } from '../user/user-bookmark/user-bookmark.data.service';
 import { UserProfileDataService } from '../user/user-profile/user-profile.data.service';
 import { UserSettingDataService } from '../user/user-setting/user-setting.data.service';
+import { OrganizationResolver } from './organization.resolver';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { UserSettingDataService } from '../user/user-setting/user-setting.data.s
     ],
     providers: [
         OrganizationService, OrganizationDataService,
+        OrganizationResolver,
         UserProfileService, UserProfileDataService,
         UserSettingService, UserSettingDataService,
         UserBookmarkService, UserBookmarkDataService,

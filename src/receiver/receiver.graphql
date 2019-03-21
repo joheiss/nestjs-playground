@@ -1,0 +1,43 @@
+type Receiver {
+    id: String
+    objectType: String
+    orgId: String
+    isDeletable: Boolean
+    status: Int
+    name: String
+    nameAdd: String
+    country: String
+    postalCode: String
+    city: String
+    street: String
+    email: String
+    phone: String
+    fax: String
+    webSite: String
+}
+
+input ReceiverInput {
+    orgId: String
+    status: Int
+    name: String
+    nameAdd: String
+    country: String
+    postalCode: String
+    city: String
+    street: String
+    email: String
+    phone: String
+    fax: String
+    webSite: String
+}
+
+type Query {
+    receivers: [Receiver]
+    receiver(id: String): Receiver
+}
+
+type Mutation {
+    createReceiver(input: ReceiverInput): Receiver
+    updateReceiver(id: String!, input: ReceiverInput): Receiver
+    deleteReceiver(id: String!): Receiver
+}

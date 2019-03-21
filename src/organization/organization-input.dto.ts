@@ -4,8 +4,8 @@ export class OrganizationInputDTO {
     status?: number;
     isDeletable?: boolean;
     name: string;
-    timezone: string;
-    currency: string;
-    locale: string;
+    timezone?: string;
+    currency?: string;
+    locale?: string;
     parentId?: string;
 }

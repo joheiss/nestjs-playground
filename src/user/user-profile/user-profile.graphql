@@ -1,0 +1,24 @@
+type UserProfile {
+    id: String
+    objectType: String
+    displayName: String
+    email: String
+    phone: String
+    imageUrl: String
+}
+
+input UserProfileInput {
+    id: String
+    displayName: String
+    email: String
+    phone: String
+    imageUrl: String
+}
+
+type Query {
+    userProfile(id: String): UserProfile
+}
+
+type Mutation {
+    updateUserProfile(id: String!, input: UserProfileInput): UserProfile
+}

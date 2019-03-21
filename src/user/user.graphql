@@ -1,0 +1,30 @@
+type User {
+    id: String
+    objectType: String
+    orgId: String
+    roles: [String]
+    locked: Boolean
+}
+
+input UserInput {
+    id: String
+    password: String
+    orgId: String
+    roles: [String]
+    displayName: String
+    email: String
+    phone: String
+    imageUrl: String
+    locked: Boolean
+}
+
+type Query {
+    users: [User]
+    user(id: String): User
+}
+
+type Mutation {
+    createUser(input: UserInput): User
+    updateUser(id: String!, input: UserInput): User
+    deleteUser(id: String!): Receiver
+}

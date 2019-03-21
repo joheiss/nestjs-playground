@@ -16,12 +16,12 @@ export class UserBookmarkEntity {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => UserProfileEntity, profile => profile.bookmarks)
+    @ManyToOne(() => UserProfileEntity, profile => profile.bookmarks, { cascade: true, onDelete: 'CASCADE' })
     profile: UserProfileEntity;
 
     toDTO(): UserBookmarkDTO  {
         const { createdAt, ...dto} = this;
-        return {...dto } as UserBookmarkDTO;
+        return {...dto, createdAt } as UserBookmarkDTO;
     }
     toShortDTO(): { type: string, objectId: string }  {
         return { type: this.type, objectId: this.objectId };

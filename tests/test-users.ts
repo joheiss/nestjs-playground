@@ -1,10 +1,16 @@
 import { UserInputDTO } from '../src/user/user-input.dto';
 import { Role } from '../src/auth/role';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: `${process.env.NODE_ENV}.env` });
+const getPassword = (): string => {
+    return process.env.TEST_PASSWORD;
+};
 
 export const TestUsers: UserInputDTO[] = [
     {
         id: 'test-super@horsti-test.de',
-        password: `tsup${new Date().toDateString()}`,
+        password: getPassword(),
         orgId: 'TST',
         roles: [Role.SUPER],
         displayName: 'Super Test',
@@ -12,7 +18,7 @@ export const TestUsers: UserInputDTO[] = [
     },
     {
         id: 'test-admin@horsti-test.de',
-        password: `tadm${new Date().toDateString()}`,
+        password: getPassword(),
         orgId: 'TST',
         roles: [Role.ADMIN],
         displayName: 'Admin Test',
@@ -20,7 +26,7 @@ export const TestUsers: UserInputDTO[] = [
     },
     {
         id: 'test-sales@horsti-test.de',
-        password: `tsls${new Date().toDateString()}`,
+        password: getPassword(),
         orgId: 'TST',
         roles: [Role.SALESUSER],
         displayName: 'Sales Test',
@@ -28,7 +34,7 @@ export const TestUsers: UserInputDTO[] = [
     },
     {
         id: 'test-audit@horsti-test.de',
-        password: `taud${new Date().toDateString()}`,
+        password: getPassword(),
         orgId: 'TST',
         roles: [Role.AUDITOR],
         displayName: 'Auditor Test',
@@ -36,7 +42,7 @@ export const TestUsers: UserInputDTO[] = [
     },
     {
         id: 'test-locked@horsti-test.de',
-        password: `tlck${new Date().toDateString()}`,
+        password: getPassword(),
         orgId: 'TST',
         roles: [Role.SALESUSER],
         displayName: 'Locked Test',
@@ -45,7 +51,7 @@ export const TestUsers: UserInputDTO[] = [
     },
     {
         id: 'test-delete@horsti-test.de',
-        password: `tdel${new Date().toDateString()}`,
+        password: getPassword(),
         orgId: 'TST',
         roles: [Role.SALESUSER],
         displayName: 'Delete Test',

@@ -62,7 +62,8 @@ export class ReceiverService {
         if (found.organization && found.organization.id) {
             await this.organizationService.validateOrg(auth, found.organization.id);
         }
-        return this.dataService.update(input);
+        const updates = {...input, id};
+        return this.dataService.update(updates);
     }
 
     async delete(auth: AuthDTO, id: string): Promise<ReceiverEntity> {
