@@ -72,7 +72,7 @@ export class TestUtility {
             .send(gql);
     }
 
-    async gqlCreateUser(input: UserInputDTO, token: string): Promise<any> {
+    async gqlCreateUser(input: Partial<UserInputDTO>, token: string): Promise<any> {
         return await this.runGql({
             query:
                 `mutation {
@@ -81,6 +81,24 @@ export class TestUtility {
                                 displayName: "${input.displayName}", email: "${input.email}"
                             })
                             { id orgId roles locked }
+                        }`,
+        }, token);
+    }
+
+    async gqlDeleteUser(userId: string, token: string): Promise<any> {
+        return await this.runGql({
+            query:
+                `mutation {
+                           deleteUser(id: "${userId}") { id orgId roles }
+                        }`,
+        }, token);
+    }
+
+    async gqlUpdateUser(userId: string, input: Partial<UserInputDTO>, token: string): Promise<any> {
+        return await this.runGql({
+            query:
+                `mutation {
+                            updateUser(id: "${userId}" input: { locked: ${input.locked} }) { id orgId roles locked }
                         }`,
         }, token);
     }
@@ -94,7 +112,8 @@ export class TestUtility {
 
     gqlIsOK(response: any): boolean {
         const { errors, data } = response.body;
-        return !!errors === false && !!data === true;
+        errors ? console.log('errors: ', errors) : console.log('data: ', data);
+        return !!errors === false;
     }
 
     parseGqlErrors(response: any): any {

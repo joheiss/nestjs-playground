@@ -148,12 +148,15 @@ describe('Auth GraphQL (e2e)', () => {
                 const updates: UserInputDTO = {
                     locked: true,
                 };
-                const response = await helper.runGql({
-                    query:
-                        `mutation {
-                            updateUser(id: "${userId}" input: { locked: ${updates.locked} }) { id orgId roles locked }
-                        }`,
-                }, token);
+                const response = await helper.gqlUpdateUser(userId, updates, token);
+                expect(helper.gqlIsOK(response)).toBeTruthy();
+            });
+        });
+
+        describe('GQL deleteUser', () => {
+            it('should be able to delete a user', async () => {
+                const userId = deleteUser.input.id;
+                const response = await helper.gqlDeleteUser(userId, token);
                 expect(helper.gqlIsOK(response)).toBeTruthy();
             });
         });
